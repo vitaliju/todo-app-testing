@@ -97,7 +97,7 @@ describe('Adding new tasks', () => {
 
   it('deletes completed tasks if "Clear" button is clicked', () => {
     cy.addTask('Go shopping');
-    cy.get('.todo-list  li .toggle').click();
+    cy.get('.todo-list li .toggle').click();
     cy.contains('Clear').click();
     cy.addTask('Wash the car');
     cy.get('.todo-list li').should('contain', 'Wash the car').and('not.contain', 'Go shopping');
