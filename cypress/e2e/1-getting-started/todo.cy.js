@@ -5,65 +5,50 @@ const pageUrl = "https://todolist.james.am/"
 describe('Website loads elements correctly', () => {
   beforeEach(() => {
     cy.visit(pageUrl)
-  })
+  });
 
-  it('displays two todo items by default', () => {
-    cy.get('.todo-list li').should('have.length', 0)
-  })
+  it('displays To Do List form on load', () => {
+    cy.contains('h1', 'To Do List');
+  });
 
-  it('can add new todo items', () => {
-    const newItem = 'Feed the cat'
-    cy.get('[data-test=new-todo]').type(`${newItem}{enter}`)
-    cy.get('.todo-list li')
-      .should('have.length', 3)
-      .last()
-      .should('have.text', newItem)
-  })
+  it('displays input field on load', () => {
+    cy.get('input.new-todo').should('exist').and('be.visible');
+  });
 
-  it('can check off an item as completed', () => {
-    cy.contains('Pay electric bill')
-      .parent()
-      .find('input[type=checkbox]')
-      .check()
-    cy.contains('Pay electric bill')
-      .parents('li')
-      .should('have.class', 'completed')
-  })
+  it('displays an empty input field', () => {
+    cy.get('input.new-todo').should('have.value', '');
+  });
 
-  context('with a checked task', () => {
-    beforeEach(() => {
-      cy.contains('Pay electric bill')
-        .parent()
-        .find('input[type=checkbox]')
-        .check()
-    })
+  it('displays the correct placeholder text', () => {
+    cy.get('input.new-todo').should('have.attr', 'placeholder', "What need's to be done?");
+  });
 
-    it('can filter for uncompleted tasks', () => {
-      cy.contains('Active').click()
-      cy.get('.todo-list li')
-        .should('have.length', 1)
-        .first()
-        .should('have.text', 'Walk the dog')
-      cy.contains('Pay electric bill').should('not.exist')
-    })
+  it('should allow writing text', () => {
+    cy.get('input.new-todo').type('Wash the car').should('have.value', 'Wash the car');
+  });
+});
+describe('Adding new tasks', () => {
+  beforeEach(() => {
+    cy.visit(pageUrl)
+  });
 
-    it('can filter for completed tasks', () => {
-      cy.contains('Completed').click()
+  it('adds a new task', () => {
+    cy.addTask('Go to the gym');
+    cy.shouldContainTask('Go to the gym');
+  });
 
-      cy.get('.todo-list li')
-        .should('have.length', 1)
-        .first()
-        .should('have.text', 'Pay electric bill')
+  it('task persist after page reload', () => {
+    cy.addTask('Go to the gym');
+    cy.shouldContainTask('Go to the gym');
+    cy.reload();
+    cy.shouldContainTask('Go to the gym');
+  });
 
-      cy.contains('Walk the dog').should('not.exist')
-    })
+  it('marks tasks as completed', () => {
+    cy.addTask('Go to the gym');
+    cy.get('.todo-list li .toggle').click();
+    cy.get('.todo-list li').should('have.class', 'completed');
+  });
+});
 
-    it('can delete all completed tasks', () => {
-      cy.contains('Clear completed').click()
-      cy.get('.todo-list li')
-        .should('have.length', 1)
-        .should('not.have.text', 'Pay electric bill')
-      cy.contains('Clear completed').should('not.exist')
-    })
-  })
-})
+

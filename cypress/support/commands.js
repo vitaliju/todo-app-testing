@@ -23,3 +23,11 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('addTask', (task) => {
+    cy.get('input.new-todo').type(`${task}{enter}`);
+});
+
+Cypress.Commands.add('shouldContainTask', (task) => {
+    cy.contains(task).should('exist');
+});
