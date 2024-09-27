@@ -25,6 +25,38 @@ describe('Website loads elements correctly', () => {
   it('should allow writing text', () => {
     cy.get('input.new-todo').type('Wash the car').should('have.value', 'Wash the car');
   });
+
+  describe('All elements are visible after adding task', () => {
+    it('displays task count', () => {
+      cy.addTask('Homework in progress');
+      cy.shouldContainTask('Homework in progress');
+      cy.get('.todo-count').should('exist').and('be.visible');
+    });
+
+    it('displays "All" button', () => {
+      cy.addTask('Homework in progress');
+      cy.shouldContainTask('Homework in progress');
+      cy.get('#toggle-all').should('exist');
+    });
+
+    it('displays "completed" button', () => {
+      cy.addTask('Homework in progress');
+      cy.shouldContainTask('Homework in progress');
+      cy.get('a[href="#/completed"]').should('exist').and('be.visible');
+    });
+
+    it('displays "active" button', () => {
+      cy.addTask('Homework in progress');
+      cy.shouldContainTask('Homework in progress');
+      cy.get('a[href="#/active"]').should('exist').and('be.visible');
+    });
+
+    it('displays "clear" button', () => {
+      cy.addTask('Homework in progress');
+      cy.shouldContainTask('Homework in progress');
+      cy.get('button.clear-completed').should('exist').and('be.visible');
+    });
+  });
 });
 
 describe('Task management', () => {
