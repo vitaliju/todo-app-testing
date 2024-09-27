@@ -16,4 +16,4 @@ Before you begin, ensure you have the following installed on your machine:
 
 ## CI/CD Integration with GitHub Actions
 
-This project uses GitHub Actions to automate the testing of the To-do app with Cypress. Every time changes are pushed to the main branch or a pull request is created, the Cypress tests are automatically executed against the live application at https://todolist.james.am/.
+This project uses GitHub Actions to automate the testing of the To-do app with cypress-pipelines.
